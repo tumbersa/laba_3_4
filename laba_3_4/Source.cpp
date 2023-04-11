@@ -178,86 +178,89 @@ void naturalMerge(ofstream& fileL, ifstream& fileB, ifstream& fileC, int k) {
     }
     print(temp2);
 
-    int i = 1, j = 1;
-    bool flag = true,flag2=true;
-    vector <string> temp11, temp22;
-    temp11.push_back(temp1[0]);
-    temp22.push_back(temp2[0]);
+    string x1, x2, y1, y2;
+    int i = 0, j = 0;
+    x2 = temp1[i]; y2 = temp2[j];
+    x1 = x2; y1 = y2;
     while (i < temp1.size() && j < temp2.size()) {
-
-        while (flag)
-            if (compare(temp1[i], temp1[i - 1], k)&& i != temp1.size())
-            {
-                temp11.push_back(temp1[i]);
-                i++;
-                if (i == temp1.size()) flag = false;
-            }
-            else flag = false;
-        print(temp11);
-        flag = true;
-        //if (i == temp1.size()) break;
-
-        while (flag)
-            
-            if (compare(temp2[j], temp2[j - 1], k) && j != temp2.size())
-            {
-                temp22.push_back(temp2[j]);
-                j++;
-                if (j == temp2.size()) flag = false;
-            }
-            else flag = false;
-        
-        print(temp22);
-        flag = true;
-
-        int i2 = 0, j2 = 0;
-        while (i2 != temp11.size() && j2 != temp22.size()) {
-            if (compare(temp11[i2], temp22[j2],k)) {
-                if (i + j + 2 >= temp1.size() + temp2.size() && (i2== temp11.size() && j2 == temp22.size()-1 ||
-                    i2 == temp11.size()-1 && j2 == temp22.size())) fileL << temp22[j2];
-                else fileL << temp22[j2] << '\n';
-                j2++;
-            }
-            else {
-                if (i + j + 2 >= temp1.size() + temp2.size() && (i2 == temp11.size() && j2 == temp22.size() - 1 ||
-                    i2 == temp11.size() - 1 && j2 == temp22.size())) fileL << temp11[i2] ;
-                else fileL << temp11[i2] << '\n';
-                i2++;
+        if (compare(y2, x2, k)) {
+            if (i == temp1.size() && j == temp2.size() - 1 || i == temp1.size() - 1 && j == temp2.size())
+                fileL << x2;
+            else fileL << x2 << '\n';
+            x1 = x2;
+            i++;
+            if (i != temp1.size()) {
+                x2 = temp1[i];
+                if (compare(x1, x2, k)) {
+                    if (i == temp1.size() && j == temp2.size() - 1 || i == temp1.size() - 1 && j == temp2.size())
+                        fileL << y2;
+                    else fileL << y2 << '\n';
+                    y1 = y2;
+                    j++;
+                    if (j != temp2.size()) {
+                        y2 = temp2[j];
+                        while (!compare(y1, y2, k)) {
+                            if (i == temp1.size() && j == temp2.size() - 1 || i == temp1.size() - 1 && j == temp2.size())
+                                fileL << y2;
+                            else fileL << y2 << '\n';
+                            j++;
+                            y1 = y2;
+                            if (j != temp2.size()) y2 = temp2[j];
+                            else break;
+                        }
+                    }
+                    else break;
+                }
             }
         }
-        if (i2 == temp11.size()) 
-            while (j2 < temp22.size()) {
-                if (i + j + 2 >= temp1.size() + temp2.size() && (i2 == temp11.size() && j2 == temp22.size() - 1 ||
-                    i2 == temp11.size() - 1 && j2 == temp22.size())) fileL << temp22[j2] ;
-                else fileL << temp22[j2] << '\n';
-                j2++;
+            else 
+            if (!compare(y2, x2, k)) {
+                if (i == temp1.size() && j == temp2.size() - 1 || i == temp1.size() - 1 && j == temp2.size())
+                    fileL << y2;
+                else fileL << y2 << '\n';
+                y1 = y2;
+                j++;
+                if (j != temp2.size()) {
+                    y2 = temp2[j];
+                    if (compare(y1, y2, k)) {
+                        if (i == temp1.size() && j == temp2.size() - 1 || i == temp1.size() - 1 && j == temp2.size())
+                            fileL << x2;
+                        else fileL << x2 << '\n';
+                        x1 = x2;
+                        i++;
+                        if (i != temp1.size()) {
+                            x2 = temp1[i];
+                            while (!compare(x1, x2, k)) {
+                                if (i == temp1.size() && j == temp2.size() - 1 || i == temp1.size() - 1 && j == temp2.size())
+                                    fileL << x2;
+                                else fileL << x2 << '\n';
+                                i++;
+                                x1 = x2;
+                                if (i != temp1.size()) x2 = temp1[i];
+                                else break;
+                            }
+                        }
+                        else break;
+                    }
+                }
             }
-        if (j2 == temp22.size())
-            while (i2 < temp11.size()) {
-                if (i + j + 2 >= temp1.size() + temp2.size() && (i2 == temp11.size() && j2 == temp22.size() - 1 ||
-                    i2 == temp11.size() - 1 && j2 == temp22.size())) fileL << temp11[i2] ;
-                else fileL << temp11[i2] << '\n';
-                i2++;
-            }
-        temp11.clear(); temp22.clear();
-       
-        if (i < temp1.size())
-            temp11.push_back(temp1[i]);
-        i++;
-       
-        if (j<temp2.size())
-            temp22.push_back(temp2[j]);
-        j++;
-        
-    }
-    print(temp1);
-    if (j >= temp2.size() && i <= temp1.size()) {
-        fileL << '\n';
-        for (int i2 = i - 1; i2 < temp1.size(); i2++)
-            if (i2 != temp1.size() - 1) fileL << temp1[i2] << '\n';
-            else fileL << temp1[i2];
-    }
 
+
+    }
+    if (j>=temp2.size() && i<temp1.size()) 
+        while (i != temp1.size()) {
+            if (i == temp1.size() && j == temp2.size() - 1 || i == temp1.size() - 1 && j == temp2.size())
+                fileL << temp1[i];
+            else fileL << temp1[i] << '\n';
+            i++;
+        }
+    if (i >= temp1.size() && j < temp2.size())
+        while (j != temp2.size()) {
+            if (i == temp1.size() && j == temp2.size() - 1 || i == temp1.size() - 1 && j == temp2.size())
+                fileL << temp2[j];
+            else fileL << temp2[j] << '\n';
+            j++;
+        }
 
     fileL.close(); fileB.close(); fileC.close();
     ifstream fL("L.bin", ios::binary);
@@ -286,7 +289,7 @@ int main() {
         return 1;
     }
     string s = "Петров Александр Иванович +79502234424 ул.Карла Маркса д.1";
-    //fileL.write(s.c_str(), sizeof(s));
+   
     fileL << s<<'\n';
     s = "Петрав Александр Ивановичъ +79502234423 ул.Карла Маркса д.2";
     fileL << s << '\n';
@@ -309,7 +312,7 @@ int main() {
         getline(fileL2, s1);
         ot.push_back(s1);
     }
-    //fileL2.read(&s1[0], sizeof(s1));
+   
     fileL2.close();
     cout << "Before" << endl;
     print(ot);
@@ -345,45 +348,6 @@ int main() {
     fileL4.close();
     fileB1.close();
     fileC1.close();
-
-    //ifstream fL("L.bin", ios::binary);
-    //ofstream fB("B.bin", ios::binary);
-    //ofstream fC("C.bin", ios::binary);
-
-   
-
-    //split(fL,fB,fC,k);
-
-   
-    //fC.close();
-    //ifstream fC1("C.bin", ios::binary);
-   
-    //fL.close();
-    //fB.close();
-    //fC1.close();
-    //ofstream fileL5("L.bin", ios::binary);
-    //ifstream fileB5("B.bin", ios::binary);
-    //ifstream fileC5("C.bin", ios::binary);
-
-    //naturalMerge(fileL5, fileB5, fileC5, k);
-    //fileL5.close();
-    //fileB5.close();
-    //fileC5.close();
-    //
-
-    //ifstream fL22("L.bin", ios::binary);
-    //ofstream fB22("B.bin", ios::binary);
-    //ofstream fC22("C.bin", ios::binary);
-
-
-    //
-
-    //split(fL22, fB22, fC22, k);
-
-    //fC22.close();
-    //fL22.close();
-    //fB22.close();
-
 
 
     ot.clear();
